@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import { useFetchGifs } from "../hooks/useFetchGifs";
 import GifGridItem from "./GifGridItem";
-import { getGifs } from "../helpers/getGifs";
+// import { getGifs } from "../helpers/getGifs";
 
 const GifGrid = (props) => {
-  const [images, setImages] = useState([]);
-
-  useEffect(() => {
-        getGifs(props.category).then(imgs=>setImages(imgs))
-  }, []);
-  
-
+  const { data, loading } = useFetchGifs(props.category);
+  console.log(data, loading);
+  // useEffect(() => {
+  //       getGifs(props.category).then(imgs=>setImages(imgs))
+  // }, [props.category]);
+  // también se puede poner solo setImages
   return (
     <>
-      <h3>{props.category} </h3>
-      <div className="card-grid">
-          {images.map((img) => (
-            <GifGridItem key={img.id} {...img} />
-          ))}
-        
+      <h3 className="animate__animated animate__fadeIn">{props.category} </h3>
+      {/*Lo mismo que loading ? <p></p> : null*/}
+      {loading && <p className="animate__animated animate__fadeIn">Loading</p>}      <div className="card-grid" >
+        {data.map((img) => (
+          <GifGridItem key={img.id} {...img} />
+        ))}
       </div>
     </>
   );
